@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#091c2c"><meta name="field-link-build" content="__FIELD_LINK_BUILD__"><title>Field Link</title>
+<link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header><a class="wordmark" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="16" r="8"/><path d="m16 16 11-11"/><circle cx="16" cy="16" r="2"/></svg>FIELD LINK</a><div class="header-actions"><span class="status off" id="network">Connecting</span><button id="settings" aria-haspopup="dialog">Options <span aria-hidden="true">•••</span></button></div></header>
+<div class="update-banner" id="update-banner" hidden><button id="update-banner-button" aria-haspopup="dialog">Update available <span aria-hidden="true">›</span></button></div>
+<p role="status" id="notice" hidden></p>
+<main>
+ <section id="join" class="welcome">
+  <span class="kicker">OFFLINE ROOM</span><h1>Join Field Link.</h1>
+  <p>Talk, message and share photos with people on your local network.</p>
+  <form id="login"><label>Display name<input id="name" maxlength="24" required autocomplete="off" placeholder="e.g. Workshop"></label>
+  <label>Room invite<input id="code" type="password" required maxlength="24" autocomplete="off" placeholder="Enter the code shared by your host"></label>
+  <button class="primary">Join room</button></form>
+ </section>
+ <section id="room" hidden>
+  <div class="room-heading"><h1 id="view-title">Messages</h1><nav aria-label="Room views"><button id="chats-tab" aria-pressed="true">Chats</button><button id="directory-tab" aria-pressed="false" aria-label="Tele-directory" title="Tele-directory">☷</button><button id="tracking-tab" aria-pressed="false" aria-label="Live location" title="Live location">⌖</button><button id="room-tab" aria-pressed="false">Room</button></nav></div>
+  <div id="workspace">
+   <aside id="people" aria-label="Room members"><h2>People</h2><div id="roster"></div></aside>
+   <article id="conversation">
+    <div class="conversation-head"><button id="back" aria-label="Back to chats">←</button><span class="avatar" id="initials">FL</span>
+     <div><h2 id="person">Select a chat</h2><small id="presence">Local network</small></div>
+     <div class="call-actions"><button class="icon" id="voice" aria-label="Voice" title="Voice call" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 5 4c-5 4 11 20 15 15l1-3-5-3-2 2a15 15 0 0 1-5-5l2-2z"/></svg></button><button class="icon" id="video" aria-label="Video" title="Video call" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3"/></svg></button></div>
+    </div>
+    <div id="messages" aria-label="Messages"></div>
+    <form id="compose"><label class="attach" title="Attach photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 15 6-6a2 2 0 0 1 3 3l-8 8a4 4 0 0 1-6-6l9-9a5 5 0 0 1 7 7l-7 7"/></svg><input id="file" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Attach photo"></label><input id="text" aria-label="Message" maxlength="400" placeholder="Type a message…"><button class="primary icon" id="send" aria-label="Send" title="Send message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 18-7-7 18-3-8zM11 13 21 3"/></svg></button></form>
+   </article>
+  </div>
+  <section id="directory" class="glass-panel" hidden><label>Find a member<input id="directory-search" type="search" placeholder="Search by name"></label><div id="directory-list"></div></section>
+  <section id="tracking" class="glass-panel" hidden>
+   <div class="section-line"><div><h2>Live location</h2><p>Share your position while Field Link is open.</p></div><button id="share-location" class="primary">Share my location</button></div>
+   <p id="location-status" role="status"></p>
+   <canvas id="location-plot" width="620" height="300" aria-label="Offline relative position plot"></canvas><div id="location-list"></div>
+   <form id="location-grant" hidden><h2>Share a member’s position</h2><p>The member must have location sharing turned on.</p><label>Member sharing<select id="location-subject" required></select></label><label>Share with<select id="location-viewer" required></select></label><div><button class="primary" value="grant">Allow</button> <button value="revoke">Revoke</button></div><div id="location-grants"></div></form>
+  </section>
+  <section id="room-info" hidden>
+   <span class="kicker">ESP32 HOST</span><p id="identity"></p>
+   <div class="details"><div><small>Online</small><strong id="online-count">–</strong></div><div><small>Free hub memory</small><strong id="heap">–</strong></div></div>
+   <div id="operator" class="console-grid" hidden>
+    <div class="details"><div><small>Active calls</small><strong id="active-count">0</strong></div><div><small>Hub uptime</small><strong id="uptime">–</strong></div></div>
+    <p id="reset-reason"></p>
+    <h2>Connected devices</h2><div id="operator-roster"></div>
+   </div>
+   <section class="console-card"><h2 id="call-heading">Call activity</h2><div id="call-list"></div></section>
+   <section class="console-card" id="operator-traffic" hidden><h2>Message activity</h2><p>Sender, recipient and delivery status.</p><div id="traffic-list"></div></section>
+   <button id="signout">Sign out and release seat</button>
+  </section>
+ </section>
+ <section class="call" id="call" hidden>
+  <span class="kicker" id="call-kind"></span><h2 id="call-who"></h2><p id="call-state"></p>
+  <video id="remote" playsinline autoplay></video><video id="preview" playsinline autoplay muted hidden></video>
+  <div id="conference-status" role="status" hidden></div><audio id="conference-audio" autoplay></audio>
+  <div class="call-actions"><button class="primary" id="answer" hidden>Answer</button><button id="play" hidden>Play audio</button><button id="mute" hidden>Mute mic</button><button id="speaker" hidden>Speaker</button><button id="camera-toggle" hidden>Camera off</button><button id="flip-camera" hidden>Flip camera</button><button id="merge-call" hidden>Add &amp; merge</button><button id="hangup" class="danger">End</button></div>
+ </section>
+ <dialog id="settings-sheet" class="glass-sheet options-sheet" aria-labelledby="settings-title">
+  <div class="sheet-grabber" aria-hidden="true"></div>
+  <div class="section-line"><div><span class="kicker">FIELD LINK</span><h2 id="settings-title">Options</h2></div><button class="sheet-close" id="close-settings" aria-label="Close options">×</button></div>
+  <div class="sheet-group">
+   <button id="open-updates" class="sheet-row"><span class="sheet-symbol" aria-hidden="true">↓</span><span><strong>Updates</strong><small id="update-summary">Check this ESP32 for updates</small></span><span class="sheet-arrow" aria-hidden="true">›</span></button>
+   <button id="reconnect" class="sheet-row"><span class="sheet-symbol" aria-hidden="true">↻</span><span><strong>Reconnect</strong><small>Reload the current hub</small></span><span class="sheet-arrow" aria-hidden="true">›</span></button>
+  </div>
+  <div class="sheet-group">
+   <button id="alerts-settings" class="sheet-row" data-native="alerts"><span class="sheet-symbol" aria-hidden="true">♢</span><span><strong>Alert permissions</strong><small>Incoming calls and notifications</small></span><span class="sheet-arrow" aria-hidden="true">›</span></button>
+   <button id="app-settings" class="sheet-row" data-native="permissions"><span class="sheet-symbol" aria-hidden="true">◉</span><span><strong>App permissions</strong><small>Microphone, camera and location</small></span><span class="sheet-arrow" aria-hidden="true">›</span></button>
+   <button id="hub-settings" class="sheet-row" data-native="hub"><span class="sheet-symbol" aria-hidden="true">⌁</span><span><strong>Hub address</strong><small id="settings-hub-address">Current ESP32</small></span><span class="sheet-arrow" aria-hidden="true">›</span></button>
+   <button id="test-ringtone" class="sheet-row"><span class="sheet-symbol" aria-hidden="true">♪</span><span><strong>Test ringtone</strong><small>Play a short preview</small></span><span class="sheet-arrow" aria-hidden="true">›</span></button>
+  </div>
+  <p class="sheet-help" id="settings-help" role="status" hidden></p>
+ </dialog>
+ <dialog id="updates-sheet" class="glass-sheet options-sheet" aria-labelledby="updates-title">
+  <div class="sheet-grabber" aria-hidden="true"></div>
+  <div class="section-line"><div><span class="kicker">ESP32 HUB</span><h2 id="updates-title">Updates</h2></div><button class="sheet-close" id="close-updates" aria-label="Close updates">×</button></div>
+  <p class="sheet-help" id="update-status" role="status">Checking the ESP32…</p>
+  <div class="update-actions"><button id="check-update">Check again</button><button class="primary" id="apply-update" hidden>Update now</button></div>
+ </dialog>
+ <dialog id="merge-sheet" class="glass-sheet" aria-labelledby="merge-title"><div class="section-line"><h2 id="merge-title">Add to voice call</h2><button id="close-merge" aria-label="Close conference options">×</button></div><p>The participant joins after answering.</p><div id="merge-people"></div></dialog>
+ <dialog id="photo-view" aria-labelledby="photo-title">
+  <div class="photo-heading"><h2 id="photo-title">Shared photo</h2><button id="close-photo">Close</button></div>
+  <img id="full-photo" alt="Shared photo at full size">
+  <button id="save-photo" class="primary">Save to device</button>
+ </dialog>
+</main>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101c20">
+  <title>Field Link · Local Communications</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">⌁</span><span>FIELD LINK<small>LOCAL COMMUNICATIONS</small></span></a>
+    <div class="top-right"><span class="pill" id="network">● Local network</span><button id="leave" hidden>Leave</button></div>
+  </header>
+  <main>
+    <section id="join-view" class="join panel">
+      <p class="eyebrow">FIELD LINK / ACCESS</p>
+      <h1>Join the local room.</h1>
+      <p>Use the member invite to communicate or the operator code to open the ESP32 duty desk.</p>
+      <form id="join-form">
+        <label>Display name<input name="name" required maxlength="24" placeholder="e.g. Workshop 1" autocomplete="off"></label>
+        <label>Access code<input name="code" type="password" required maxlength="64" placeholder="Provided by the host" autocomplete="off"></label>
+        <button class="primary">Connect to Field Link</button>
+      </form>
+    </section>
+    <p id="notice" class="notice" role="status" hidden></p>
+    <div id="room" hidden>
+      <section class="page-head">
+        <div><p class="eyebrow" id="role"></p><h1 id="headline"></h1><p id="identity"></p></div>
+        <span class="pill" id="room-mode"></span>
+      </section>
+      <section id="operator" hidden>
+        <div class="metrics">
+          <article class="panel"><span>Online devices</span><strong id="online-count">0</strong></article>
+          <article class="panel"><span>Active calls</span><strong id="call-count">0</strong></article>
+          <article class="panel"><span>Pending requests</span><strong id="request-count">0</strong></article>
+        </div>
+        <div class="grid operator-grid">
+          <article class="panel hardware">
+            <div class="panel-head"><div><p class="eyebrow">HARDWARE</p><h2>ESP32 terminal</h2></div><span class="pill" id="board-mode">Offline</span></div>
+            <p id="board-detail">No hardware heartbeat received.</p>
+            <div class="actions">
+              <button id="usb" class="primary">Connect ESP32</button><button id="drop" disabled>Disconnect</button>
+              <button id="test-board" disabled>Test outputs</button><button id="retry" disabled>Retry alert</button>
+            </div>
+            <details class="sim">
+              <summary>Phone demo without a router</summary>
+              <p>Only enable this where Wi‑Fi is permitted. Connect the laptop and phone to this network, then start Field Link in phone mode.</p>
+              <div class="actions"><button id="ap-start" disabled>Start ESP32 Wi‑Fi</button><button id="ap-stop" disabled>Stop ESP32 Wi‑Fi</button></div>
+              <p id="ap-status" role="status">Wi‑Fi is off at ESP32 power-up.</p>
+              <p id="ap-key" hidden></p>
+            </details>
+            <div id="sim-controls" class="sim" hidden>
+              <strong>Classroom simulator</strong><p>These actions do not use the physical board.</p>
+              <div class="actions"><button id="simulate">Start simulation</button><button id="sim-ack" disabled>Simulate button press</button></div>
+            </div>
+          </article>
+          <article class="panel"><p class="eyebrow">DUTY DESK</p><h2>Assistance queue</h2><div id="op-requests" class="list"></div></article>
+          <article class="panel"><p class="eyebrow">PRESENCE</p><h2>Device status</h2><div id="roster" class="list"></div></article>
+          <article class="panel"><p class="eyebrow">VOICE</p><h2>Call activity</h2><div id="call-log" class="list"></div></article>
+          <article class="panel span"><p class="eyebrow">DIAGNOSTICS</p><h2>System event log</h2><div id="journal" class="list"></div></article>
+        </div>
+      </section>
+      <section class="grid comm-grid">
+        <article class="panel">
+          <div class="panel-head"><div><p class="eyebrow">COMMUNICATIONS</p><h2>Direct channel</h2></div><button id="start-call" disabled>Voice call</button></div>
+          <label>Recipient<select id="recipient"><option value="">Choose a device</option></select></label>
+          <div id="call-box" class="call-box" hidden>
+            <p id="call-status"></p><div class="actions"><button id="answer" class="primary" hidden>Answer</button><button id="end-call">End call</button></div>
+            <audio id="remote-audio" autoplay playsinline></audio><button id="play-audio" hidden>Play remote audio</button>
+          </div>
+          <div id="messages" class="messages" aria-label="Direct messages"></div>
+          <form id="message-form" class="compose"><label class="sr" for="message">Message</label><input id="message" maxlength="1200" placeholder="Write a local message"><button class="primary">Send</button></form>
+          <label class="file">Send photo<input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">SUPPORT</p><h2>Request assistance</h2>
+          <form id="request-form">
+            <label>What do you need?<textarea id="request-text" required maxlength="180" rows="3" placeholder="e.g. Please check the test bench power supply."></textarea></label>
+            <button class="primary">Send to duty desk</button>
+          </form>
+          <div id="my-requests" class="list"></div>
+        </article>
+      </section>
+    </div>
+  </main>
+  <footer>FIELD LINK / CLASSROOM PROTOTYPE <span>Voice, messages and photos stay on the local network.</span></footer>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<resources>
+    <style name="FieldLink" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item><item name="android:colorAccent">#5AE5F4</item>
+        <item name="android:windowBackground">#091C2C</item><item name="android:statusBarColor">#091C2C</item>
+        <item name="android:windowLightStatusBar">false</item><item name="android:navigationBarColor">#091C2C</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+</resources>

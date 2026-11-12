@@ -1,0 +1,4 @@
+.build/
+private/
+release/
+firmware/FieldLinkHub/WebAssets.h
